@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freelancer_app/Pages/Homepage.dart';
 import 'package:freelancer_app/presentation/screens/onboarding/splash_screen.dart';
 
 void main() {
