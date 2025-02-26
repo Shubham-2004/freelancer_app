@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freelancer_app/Pages/login.dart';
 import 'package:freelancer_app/presentation/resume_screen/upload_resume_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -75,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         // Button
                         TextButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => UploadResumeScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.transparent,

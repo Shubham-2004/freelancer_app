@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:freelancer_app/utils/widget/custom_appbar.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:freelancer_app/backend/resume_backend.dart';
 import 'package:freelancer_app/utils/widget/resume_widget.dart';
@@ -466,96 +468,270 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
     switch (pageIndex) {
       case 0:
         return Container(
-          child: Column(
-            children: [
-              CustomButton(label: 'Select Resume', onPressed: _pickFile),
-              const SizedBox(height: 2),
-              if (_uploadStatus != null)
-                Text(
-                  _uploadStatus!,
-                  style: const TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-              const SizedBox(height: 2),
-              if (_resumeFile != null)
-                CustomButton(
-                  label: 'Upload and Parse Resume',
-                  onPressed: _parseResume,
-                ),
-              const SizedBox(height: 2),
-              CustomTextField(
-                label: 'First Name',
-                controller: _firstNameController,
-              ),
-              CustomTextField(
-                label: 'Last Name',
-                controller: _lastNameController,
-              ),
-              CustomTextField(label: 'Title', controller: _titleController),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade900, Colors.black],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: Center(
+            child: SingleChildScrollView(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 2,
+                  sigmaY: 2,
+                ), // Frosted glass effect
+                child: Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
 
-              CustomTextField(
-                label: 'Hourly Rate',
-                controller: _hourlyRateController,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: DropdownButtonFormField<String>(
-                  value: _selectedAvailability,
-                  items:
-                      ["Available", "Busy", "On Vacation"]
-                          .map(
-                            (String value) => DropdownMenuItem(
-                              value: value,
-                              child: Text(value),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.7),
+                        border: Border.all(
+                          color: Colors.green.shade400,
+                          width: 1.5,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CustomButton(
+                            label: 'Select Resume 📂',
+                            onPressed: _pickFile,
+                          ),
+                          const SizedBox(height: 12),
+                          if (_uploadStatus != null)
+                            Text(
+                              _uploadStatus!,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                          )
-                          .toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedAvailability = newValue!;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Availability',
-                    border: OutlineInputBorder(),
+                          const SizedBox(height: 12),
+                          if (_resumeFile != null)
+                            CustomButton(
+                              label: 'Upload and Parse Resume 🚀',
+                              onPressed: _parseResume,
+                            ),
+                          const SizedBox(height: 16),
+                          CustomTextField(
+                            label: 'First Name',
+                            controller: _firstNameController,
+                          ),
+                          const SizedBox(height: 12),
+                          CustomTextField(
+                            label: 'Last Name',
+                            controller: _lastNameController,
+                          ),
+                          const SizedBox(height: 12),
+                          CustomTextField(
+                            label: 'Title',
+                            controller: _titleController,
+                          ),
+                          const SizedBox(height: 12),
+                          CustomTextField(
+                            label: 'Hourly Rate',
+                            controller: _hourlyRateController,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildAvailabilityDropdown(),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         );
       case 1:
-        return Column(
-          children: [
-            CustomTextField(label: 'Bio', controller: _bioController),
-            CustomTextField(
-              label: 'Skills (comma-separated)',
-              controller:
-                  TextEditingController()
-                    ..text = _skills.join(',')
-                    ..addListener(() {
-                      _skills =
-                          _skillsController.text
-                              .split(',')
-                              .map((e) => e.trim())
-                              .toList();
-                    }),
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade900, Colors.black],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
-            const SizedBox(height: 16),
-            CustomTextField(
-              label: 'Languages (comma-separated)',
-              controller:
-                  TextEditingController()
-                    ..text = _languages.join(',')
-                    ..addListener(() {
-                      _languages =
-                          _languageController.text
-                              .split(',')
-                              .map((e) => e.trim())
-                              .toList();
-                    }),
-            ),
-          ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Heading for Bio
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 16.0,
+                ),
+                child: Text(
+                  'Tell us about yourself',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Card(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Colors.grey[950],
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Add your Bio',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        label: 'Bio',
+                        controller: _bioController,
+                        isTextArea: true,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Heading for Skills
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 16.0,
+                ),
+                child: Text(
+                  'What are your skills?',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Card(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Colors.grey[950],
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Add your Skills (comma-separated)',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        label: 'Skills',
+                        controller:
+                            TextEditingController()
+                              ..text = _skills.join(',')
+                              ..addListener(() {
+                                _skills =
+                                    _skillsController.text
+                                        .split(',')
+                                        .map((e) => e.trim())
+                                        .toList();
+                              }),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Heading for Languages
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 16.0,
+                ),
+                child: Text(
+                  'What languages do you speak?',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Card(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Colors.grey[950],
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Add your Languages (comma-separated)',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      CustomTextField(
+                        label: 'Languages',
+                        controller:
+                            TextEditingController()
+                              ..text = _languages.join(',')
+                              ..addListener(() {
+                                _languages =
+                                    _languageController.text
+                                        .split(',')
+                                        .map((e) => e.trim())
+                                        .toList();
+                              }),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
         );
       case 2:
         return _buildPortfolioSection();
@@ -568,30 +744,141 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
           ],
         );
       case 4:
-        return Column(
-          children: [
-            CustomTextField(label: 'Country', controller: _countryController),
-            CustomTextField(label: 'City', controller: _cityController),
-            CustomTextField(
-              label: 'Profile Picture URL',
-              controller: _profilePictureController,
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade900, Colors.black],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _submitProfile,
-              child: const Text('Submit Profile'),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Heading for Location and Profile Picture
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 16.0,
+                  ),
+                  child: Text(
+                    'Location and Profile Picture',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  color: Colors.grey[950],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          label: 'Country',
+                          controller: _countryController,
+                        ),
+                        CustomTextField(
+                          label: 'City',
+                          controller: _cityController,
+                        ),
+                        CustomTextField(
+                          label: 'Profile Picture URL',
+                          controller: _profilePictureController,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: ElevatedButton(
+                    onPressed: _submitProfile,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.green,
+                      shadowColor: Colors.green.withOpacity(0.5),
+                      elevation: 10,
+                    ),
+                    child: const Text('Submit Profile'),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       default:
-        return const Center(child: Text('Unknown Page'));
+        return const Center(
+          child: Text('Unknown Page', style: TextStyle(color: Colors.white)),
+        );
     }
+  }
+
+  // Helper method to build the availability dropdown
+  Widget _buildAvailabilityDropdown() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        children: [
+          Icon(Icons.event_available, color: Colors.green.shade400),
+          const SizedBox(width: 8),
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              value: _selectedAvailability,
+              items:
+                  ["Available", "Busy", "On Vacation"]
+                      .map(
+                        (String value) =>
+                            DropdownMenuItem(value: value, child: Text(value)),
+                      )
+                      .toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedAvailability = newValue!;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Availability 🗓️',
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 16,
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.white70),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Select your current availability status'),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Upload Resume')),
+      appBar: CustomAppBar(),
       body: Column(
         children: [
           Expanded(
@@ -611,30 +898,33 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
               },
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              if (_currentPage > 0)
-                ElevatedButton(
-                  onPressed: () {
-                    _pageController.previousPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  child: const Text('Previous'),
-                ),
-              if (_currentPage < 4)
-                ElevatedButton(
-                  onPressed: () {
-                    _pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  child: const Text('Next'),
-                ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                if (_currentPage > 0)
+                  ElevatedButton(
+                    onPressed: () {
+                      _pageController.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    child: const Text('Previous'),
+                  ),
+                if (_currentPage < 4)
+                  ElevatedButton(
+                    onPressed: () {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    child: const Text('Next'),
+                  ),
+              ],
+            ),
           ),
         ],
       ),
