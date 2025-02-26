@@ -39,6 +39,8 @@ dependencies:
   intl: ^0.20.2
   file_picker: ^9.0.1
   shared_preferences: ^2.5.2
+  font_awesome_flutter: ^10.8.0
+  lucide_icons: ^0.257.0
   
 
 dev_dependencies:
