@@ -201,9 +201,7 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
       );
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => Homepage(),
-        ),
+        MaterialPageRoute(builder: (context) => Homepage()),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
