@@ -6,7 +6,7 @@ import 'package:freelancer_app/Pages/login.dart';
 import 'package:freelancer_app/chat_service/pages/home.dart';
 import 'package:freelancer_app/presentation/screens/onboarding/splash_screen.dart';
 
-void main() async {
+void main() async { 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());

@@ -32,7 +32,6 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
   final _skillsController = TextEditingController();
   final _languageController = TextEditingController();
 
-  // Dynamic lists for portfolio, education, experience
   List<Map<String, dynamic>> _portfolio = [];
   List<Map<String, dynamic>> _education = [];
   List<Map<String, dynamic>> _experience = [];
@@ -162,20 +161,12 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
       _cityController.text = data['location']?['city']?.toString() ?? '';
       _profilePictureController.text = data['profilePicture']?.toString() ?? '';
 
-      // Load skills and languages
+  
       _skills = List<String>.from(data['skills'] ?? []);
       _languages = List<String>.from(data['languages'] ?? []);
-
-      // Load portfolio
       _portfolio = List<Map<String, dynamic>>.from(data['portfolio'] ?? []);
-
-      // Load education
       _education = List<Map<String, dynamic>>.from(data['education'] ?? []);
-
-      // Load experience
       _experience = List<Map<String, dynamic>>.from(data['experience'] ?? []);
-
-      // Load rating and total reviews
       _rating = data['rating']?.toDouble() ?? 0.0;
       _totalReviews = data['totalReviews']?.toInt() ?? 0;
     }
@@ -905,30 +896,39 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                if (_currentPage > 0)
-                  ElevatedButton(
-                    onPressed: () {
-                      _pageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    child: const Text('Previous'),
-                  ),
-                if (_currentPage < 4)
-                  ElevatedButton(
-                    onPressed: () {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    child: const Text('Next'),
-                  ),
-              ],
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.green.shade900, Colors.black],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if (_currentPage > 0)
+                    ElevatedButton(
+                      onPressed: () {
+                        _pageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      child: const Text('Previous'),
+                    ),
+                  if (_currentPage < 4)
+                    ElevatedButton(
+                      onPressed: () {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      child: const Text('Next'),
+                    ),
+                ],
+              ),
             ),
           ),
         ],

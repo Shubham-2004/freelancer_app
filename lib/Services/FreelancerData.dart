@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Freelancerdata {
-  String url = 'http://192.168.77.236:8080/freelancer/getfreelancer/';
+  String url = 'http://192.168.158.229:8080/freelancer/getfreelancer/';
 
   Future<Map<String, dynamic>> getFreelancerData(String id) async {
     try {
@@ -20,7 +20,7 @@ class Freelancerdata {
       }
     } catch (e) {
       print(e.toString());
-      return{};
+      return {};
     }
   }
 }
