@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:freelancer_app/Services/FreelancerData.dart';
 import 'package:freelancer_app/Services/Urllauncher.dart';
 import 'package:freelancer_app/utils/widget/custom_appbar.dart';
-import 'package:freelancer_app/utils/widget/bottom_navbar.dart';
-import 'package:http/http.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -317,10 +315,6 @@ class _HomepageState extends State<Homepage> {
             ),
           );
         },
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
       ),
     );
   }

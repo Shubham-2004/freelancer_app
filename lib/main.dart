@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:freelancer_app/Pages/Homepage.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:freelancer_app/Pages/login.dart';
-import 'package:freelancer_app/chat_service/pages/home.dart';
 import 'package:freelancer_app/presentation/screens/onboarding/splash_screen.dart';
+import 'package:freelancer_app/utils/widget/bottom_navbar_controller.dart';
 
-void main() async { 
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -41,12 +39,11 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder<User?>(
         stream: auth.authStateChanges(),
         builder: (context, snapshot) {
-          return SplashScreen();
-          // if (snapshot.hasData) {
-          //   return Homepage();
-          // } else {
-          //   return SplashScreen();
-          // }
+          if (snapshot.hasData) {
+            return BottomNavbarController();
+          } else {
+            return SplashScreen();
+          }
         },
       ),
     );

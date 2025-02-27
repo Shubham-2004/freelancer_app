@@ -8,8 +8,8 @@ import 'package:freelancer_app/chat_service/components/dialog.dart';
 import 'package:freelancer_app/chat_service/pages/chat_screen.dart';
 import 'package:freelancer_app/presentation/screens/onboarding/splash_screen.dart';
 
-class Home extends StatelessWidget {
-  Home({super.key});
+class ChatList extends StatelessWidget {
+  ChatList({super.key});
   final auth = AuthService();
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final FirebaseAuth authenticate = FirebaseAuth.instance;

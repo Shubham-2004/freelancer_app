@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:freelancer_app/chat_service/pages/chat_list.dart';
 import 'package:freelancer_app/presentation/screens/onboarding/splash_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -133,7 +134,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   ),
         ),
         SizedBox(width: 16),
-        Icon(Icons.menu, color: Colors.white),
+        // Icon(Icons.menu, color: Colors.white),
+        IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChatList()),
+            );
+          },
+          icon: Icon(Icons.chat, color: Colors.white, size: 25),
+        ),
         SizedBox(width: 16),
       ],
     );
