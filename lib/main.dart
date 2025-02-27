@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:freelancer_app/Pages/login.dart';
 import 'package:freelancer_app/presentation/screens/onboarding/splash_screen.dart';
 
-void main() async {
+void main() async { 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
