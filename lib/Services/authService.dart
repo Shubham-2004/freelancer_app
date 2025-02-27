@@ -1,38 +1,38 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class Authservice {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  Future<String> googleSignIn() async {
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  // Google Sign-In
+  Future<void> googleSignIn(Function onSuccess, Function onError) async {
     try {
-      final GoogleSignInAccount? guser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication gauth = await guser!.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: gauth.accessToken,
-        idToken: gauth.idToken,
+      await _googleSignIn.signOut(); // Ensure no existing session
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // The user canceled the sign-in
+        onError("Sign-in canceled");
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
 
-      UserCredential userCredential = await auth.signInWithCredential(
-        credential,
-      );
-
-      String? token = await userCredential.user?.getIdToken(true);
-      print(token);
-      return token!;
+      await _auth.signInWithCredential(credential);
+      onSuccess();
     } catch (e) {
-      print("No token Genearted");
-      return e.toString();
+      print("Error during Google Sign-In: $e");
+      onError(e.toString());
     }
   }
 
-  Future<String> googleSignOut() async {
-    try {
-      await GoogleSignIn().signOut();
-      await auth.signOut();
-
-      return 'Success';
-    } catch (e) {
-      return e.toString();
-    }
+  // Sign Out
+  Future<void> signOut() async {
+    await _auth.signOut();
+    await _googleSignIn.signOut();
   }
 }
