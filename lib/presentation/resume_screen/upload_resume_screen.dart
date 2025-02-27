@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:freelancer_app/Pages/Homepage.dart';
 import 'package:freelancer_app/utils/widget/custom_appbar.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:freelancer_app/backend/resume_backend.dart';
@@ -206,6 +207,10 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
       await ResumeBackend.submitProfile(profileData);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Profile submitted successfully!')),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Homepage()),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
