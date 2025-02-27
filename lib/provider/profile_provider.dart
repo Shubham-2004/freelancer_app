@@ -154,7 +154,7 @@ class ProfileProvider with ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.151.229:8080/freelancers/createFreelancer'),
+        Uri.parse('http://192.168.77.236:8080/freelancers/createFreelancer'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(profile),
       );

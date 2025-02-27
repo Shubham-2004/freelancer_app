@@ -4,21 +4,26 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ResumeBackend {
-  static Future<Map?> parseResume(File resumeFile) async {
+  static Future<Map?> parseResume(File file) async {
     try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://192.168.151.229:8080/extractResumeDetails'),
-      );
-      request.files.add(await http.MultipartFile.fromPath('file', resumeFile.path));
+      var url = "http://192.168.77.236:8080/extractResumeDetails/";
 
-      final response = await request.send();
-      final responseBody = await response.stream.bytesToString();
+      var request = http.MultipartRequest("POST", Uri.parse(url));
+
+      var multipartFile = await http.MultipartFile.fromPath('file', file.path);
+
+      request.files.add(multipartFile);
+
+      var response = await request.send();
 
       if (response.statusCode == 200) {
-        return jsonDecode(responseBody)['data'];
+        var responseData = await response.stream.bytesToString();
+        var jsonData = jsonDecode(responseData);
+        print(jsonData);
+        print(responseData);
+        print("PDF Upload Successful: $responseData");
       } else {
-        throw Exception('Error parsing resume: $responseBody');
+        print("PDF Upload Failed! Status Code: ${response.statusCode}");
       }
     } catch (e) {
       throw Exception('Error: ${e.toString()}');
@@ -46,7 +51,7 @@ class ResumeBackend {
   static Future<void> submitProfile(Map profileData) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.151.229:8080/freelancer/createfreelancer/'),
+        Uri.parse('http://192.168.77.236:8080/freelancer/createfreelancer/'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(profileData),
       );
