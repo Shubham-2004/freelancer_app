@@ -17,7 +17,6 @@ class _HomepageState extends State<Homepage> {
   Map<String, dynamic> freelancerFetchedData = {};
   String tempId = "67bef670c9c07382fdc7712a";
   late Future<Map<String, dynamic>> _futureData;
-  int _currentIndex = 0;
 
   Future<Map<String, dynamic>> getData() async {
     Map<String, dynamic> data = await freelancer.getFreelancerData(tempId);
@@ -37,11 +36,6 @@ class _HomepageState extends State<Homepage> {
     fontSize: 22,
   );
 
-  void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
