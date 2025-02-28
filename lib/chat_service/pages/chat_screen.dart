@@ -24,7 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final MessageService messageService = MessageService();
   final FirebaseAuth authenticate = FirebaseAuth.instance;
   List<String> suggestions = [];
-  String tempId = "67c17c0873a6c0dcdeda854f";
+  String tempId = "67c17d9973a6c0dcdeda8551";
   bool showSuggestions = false;
 
   String getFriendName() {

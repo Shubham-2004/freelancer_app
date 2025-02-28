@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:freelancer_app/Pages/Homepage.dart';
+import 'package:freelancer_app/utils/widget/bottom_navbar_controller.dart';
 import 'package:freelancer_app/utils/widget/custom_appbar.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'package:freelancer_app/backend/resume_backend.dart';
@@ -201,7 +202,7 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
       );
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Homepage()),
+        MaterialPageRoute(builder: (context) => BottomNavbarController()),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
