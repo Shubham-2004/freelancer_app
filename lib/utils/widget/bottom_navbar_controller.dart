@@ -31,7 +31,7 @@ class _BottomNavbarControllerState extends State<BottomNavbarController> {
           });
         },
         backgroundColor: Colors.black,
-        selectedItemColor: Colors.greenAccent,
+        selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

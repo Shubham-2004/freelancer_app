@@ -82,11 +82,20 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Colors.green, Colors.black],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: Text(
           getFriendName(),
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 18,
           ),
         ),
@@ -96,59 +105,63 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Stack(
         children: [
           //messages
-          StreamBuilder(
-            stream: messageService.getMessage(
-              authenticate.currentUser!.uid,
-              widget.recierverId!,
-            ),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text(
-                    'Error fetching the messages',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+          Container(
+            color: Colors.grey[800],
+            child: StreamBuilder(
+              stream: messageService.getMessage(
+                authenticate.currentUser!.uid,
+                widget.recierverId!,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text(
+                      'Error fetching the messages',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
+                  );
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: Colors.black),
+                  );
+                }
+                if (scroll.hasClients) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => scrollToBottom(),
+                  );
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ListView(
+                    padding: const EdgeInsets.only(bottom: 85),
+                    controller: scroll,
+                    children:
+                        snapshot.data!.docs.map((document) {
+                          final Map<String, dynamic> data =
+                              document.data() as Map<String, dynamic>;
+                          debugPrint(data["message"]);
+                          return MessageBubble(
+                            message: data["message"],
+                            userName:
+                                data['senderEmail'].toString().split("@")[0],
+                            alignment:
+                                data['senderId'] ==
+                                        authenticate.currentUser!.uid
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                            timestamp: data["time"],
+                          );
+                        }).toList(),
                   ),
                 );
-              }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(color: Colors.black),
-                );
-              }
-              if (scroll.hasClients) {
-                WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => scrollToBottom(),
-                );
-              }
-
-              return Padding(
-                padding: const EdgeInsets.all(10),
-                child: ListView(
-                  padding: const EdgeInsets.only(bottom: 85),
-                  controller: scroll,
-                  children:
-                      snapshot.data!.docs.map((document) {
-                        final Map<String, dynamic> data =
-                            document.data() as Map<String, dynamic>;
-                        debugPrint(data["message"]);
-                        return MessageBubble(
-                          message: data["message"],
-                          userName:
-                              data['senderEmail'].toString().split("@")[0],
-                          alignment:
-                              data['senderId'] == authenticate.currentUser!.uid
-                                  ? Alignment.centerRight
-                                  : Alignment.centerLeft,
-                          timestamp: data["time"],
-                        );
-                      }).toList(),
-                ),
-              );
-            },
+              },
+            ),
           ),
 
           Positioned(
@@ -182,7 +195,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     : const SizedBox.shrink(),
           ),
 
-          //sned message button
+          //send message button
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -202,8 +215,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: TextField(
                   // onChanged: (value) => onMessageChanged(value),
                   controller: message,
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ), // Set text color to black
                   decoration: InputDecoration(
                     hintText: "Enter your message",
+                    hintStyle: TextStyle(color: Colors.black38),
                     suffixIcon: IconButton(
                       onPressed: () {
                         sendMessage();
