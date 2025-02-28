@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:freelancer_app/Notification/notification_controller.dart';
+import 'package:freelancer_app/client_side/pages/client_bottom_navigation.dart';
+import 'package:freelancer_app/client_side/pages/client_home_page.dart';
 import 'package:freelancer_app/presentation/screens/onboarding/splash_screen.dart';
 import 'package:freelancer_app/utils/widget/bottom_navbar_controller.dart';
-import 'package:toastification/toastification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,30 +38,30 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      themeMode:
-          ThemeMode
-              .system, 
-      home: FutureBuilder(
-        future: _showAnimation(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: Center(child: Image.asset('assets/images/animation.gif')),
-            );
-          } else {
-            return StreamBuilder<User?>(
-              stream: auth.authStateChanges(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return BottomNavbarController();
-                } else {
-                  return SplashScreen();
-                }
-              },
-            );
-          }
-        },
-      ),
+      themeMode: ThemeMode.system,
+      home: ClientBottomNavigation(),
+      // home: FutureBuilder(
+      //   future: _showAnimation(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return Scaffold(
+      //         body: Center(child: Image.asset('assets/images/animation.gif')),
+      //       );
+      //     } else {
+      //       return StreamBuilder<User?>(
+      //         stream: auth.authStateChanges(),
+      //         builder: (context, snapshot) {
+      //           return ClientBottomNavigation();
+      //           // if (snapshot.hasData) {
+      //           //   return BottomNavbarController();
+      //           // } else {
+      //           //   return SplashScreen();
+      //           // }
+      //         },
+      //       );
+      //     }
+      //   },
+      // ),
     );
   }
 }
