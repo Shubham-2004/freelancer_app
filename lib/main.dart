@@ -15,6 +15,10 @@ class MyApp extends StatelessWidget {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  Future<void> _showAnimation() async {
+    await Future.delayed(const Duration(seconds: 3));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,15 +38,25 @@ class MyApp extends StatelessWidget {
       ),
       themeMode:
           ThemeMode
-              .system, // Automatically switch between light and dark themes
-      // added the stream bulder to notify the user the login and logout activities
-      home: StreamBuilder<User?>(
-        stream: auth.authStateChanges(),
+              .system, 
+      home: FutureBuilder(
+        future: _showAnimation(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return BottomNavbarController();
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              body: Center(child: Image.asset('assets/images/animation.gif')),
+            );
           } else {
-            return SplashScreen();
+            return StreamBuilder<User?>(
+              stream: auth.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return BottomNavbarController();
+                } else {
+                  return SplashScreen();
+                }
+              },
+            );
           }
         },
       ),
