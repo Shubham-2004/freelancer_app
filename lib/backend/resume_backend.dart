@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ResumeBackend {
   static Future<Map?> parseResume(File file) async {
     try {
-      var url = "http://192.168.77.236:8080/extractResumeDetails/";
+      var url = "http://192.168.192.229:8080/extractResumeDetails/";
 
       var request = http.MultipartRequest("POST", Uri.parse(url));
 
@@ -51,7 +51,7 @@ class ResumeBackend {
   static Future<void> submitProfile(Map profileData) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.77.236:8080/freelancer/createfreelancer/'),
+        Uri.parse('http://192.168.192.229:8080/freelancer/createfreelancer/'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(profileData),
       );

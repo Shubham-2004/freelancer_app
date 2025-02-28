@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,42 +15,59 @@ class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Start Chatting..'),
-          centerTitle: true,
-          backgroundColor: Colors.amber,
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) =>
-                        const Center(child: CircularIndicator()),
-                  );
-                  final String message = await auth.signOut();
-                  Navigator.pop(context);
-
-                  if (message == "Success") {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SplashScreen(),
-                      ),
-                      (route) => false,
-                    );
-                  } else {
-                    dailog(message, context, () => Navigator.pop(context));
-                  }
-                },
-                icon: const Icon(
-                  Icons.logout_outlined,
-                  color: Colors.black,
-                  size: 25,
-                ))
-          ],
+      appBar: AppBar(
+        title: const Text(
+          'Start Chatting..',
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
-        body: StreamBuilder<QuerySnapshot>(
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade900, Colors.black],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const Center(child: CircularIndicator()),
+              );
+              final String message = await auth.signOut();
+              Navigator.pop(context);
+
+              if (message == "Success") {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => SplashScreen()),
+                  (route) => false,
+                );
+              } else {
+                dailog(message, context, () => Navigator.pop(context));
+              }
+            },
+            icon: const Icon(
+              Icons.logout_outlined,
+              color: Colors.black,
+              size: 25,
+            ),
+          ),
+        ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.black, Colors.green.shade900],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: StreamBuilder<QuerySnapshot>(
           stream: db.collection("users").snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -61,44 +77,49 @@ class ChatList extends StatelessWidget {
                 child: Text(
                   "Somehting error occured ...",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.black),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
                 ),
               );
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             return ListView(
-                children: snapshot.data!.docs
-                    .where((doc) =>
-                        doc["email"] != authenticate.currentUser!.email)
-                    .map<Widget>((doc) => ListTile(
+              children:
+                  snapshot.data!.docs
+                      .where(
+                        (doc) =>
+                            doc["email"] != authenticate.currentUser!.email,
+                      )
+                      .map<Widget>(
+                        (doc) => ListTile(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatScreen(
-                                    receiverEmail: doc["email"],
-                                    recierverId: doc["userId"],
-                                  ),
-                                ));
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => ChatScreen(
+                                      receiverEmail: doc["email"],
+                                      recierverId: doc["userId"],
+                                    ),
+                              ),
+                            );
                           },
                           leading: CircleAvatar(
                             radius: 25,
-                            backgroundColor: Colors.black87,
+                            backgroundColor: Colors.grey.shade200,
                             child: Text(
                               doc['email'][0].toString().toUpperCase() +
                                   doc['email']
                                       .toString()
                                       .split('@')[1][0]
                                       .toUpperCase(),
-                              style: const TextStyle(color: Colors.white),
+                              style: const TextStyle(color: Colors.black),
                             ),
                           ),
                           title: Text(
@@ -125,9 +146,13 @@ class ChatList extends StatelessWidget {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                        ))
-                    .toList());
+                        ),
+                      )
+                      .toList(),
+            );
           },
-        ));
+        ),
+      ),
+    );
   }
 }

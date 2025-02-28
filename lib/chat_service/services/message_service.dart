@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,19 +20,23 @@ class MessageService extends ChangeNotifier {
         .collection("chat")
         .doc(chatId.join("*"))
         .collection("messages")
-        .add(ChatMessage(
-                message: message,
-                senderId: currentUserId,
-                receiverId: receiverId,
-                senderEmail: currentUserEmail!,
-                time: timestamp)
-            .toMap());
+        .add(
+          ChatMessage(
+            message: message,
+            senderId: currentUserId,
+            receiverId: receiverId,
+            senderEmail: currentUserEmail!,
+            time: timestamp,
+          ).toMap(),
+        );
   }
 
   // receiving the message
 
   Stream<QuerySnapshot> getMessage(
-      String currentUserId, String receiverUserId) {
+    String currentUserId,
+    String receiverUserId,
+  ) {
     List<String> chatId = [currentUserId, receiverUserId];
     chatId.sort();
 
