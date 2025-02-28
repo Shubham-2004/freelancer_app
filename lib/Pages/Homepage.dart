@@ -15,9 +15,8 @@ class _HomepageState extends State<Homepage> {
   final User? firebaseUser = FirebaseAuth.instance.currentUser;
   final Freelancerdata freelancer = Freelancerdata();
   Map<String, dynamic> freelancerFetchedData = {};
-  String tempId = "67c17d9973a6c0dcdeda8551";
+  String tempId = "67c17cff73a6c0dcdeda8550";
   late Future<Map<String, dynamic>> _futureData;
-  int _currentIndex = 0;
 
   Future<Map<String, dynamic>> getData() async {
     Map<String, dynamic> data = await freelancer.getFreelancerData(tempId);
@@ -36,12 +35,6 @@ class _HomepageState extends State<Homepage> {
     color: Colors.white,
     fontSize: 22,
   );
-
-  void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -201,8 +194,8 @@ class _HomepageState extends State<Homepage> {
                               leading:
                                   project["images"].isNotEmpty
                                       ? Image.network(
-                                        project["images"][0],
-                                        // "https://www.ntaskmanager.com/wp-content/uploads/2020/02/What-is-a-Project-1-scaled.jpg",
+                                        // project["images"][0],
+                                        "https://www.ntaskmanager.com/wp-content/uploads/2020/02/What-is-a-Project-1-scaled.jpg",
                                         width: 50,
                                         height: 50,
                                         fit: BoxFit.cover,
