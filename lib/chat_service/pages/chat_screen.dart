@@ -24,6 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final MessageService messageService = MessageService();
   final FirebaseAuth authenticate = FirebaseAuth.instance;
   List<String> suggestions = [];
+  String tempId = "67c17c0873a6c0dcdeda854f";
   bool showSuggestions = false;
 
   String getFriendName() {
@@ -43,12 +44,12 @@ class _ChatScreenState extends State<ChatScreen> {
     String text = message.text.trim();
 
     // Check if AI model is mentioned
-    if (text.contains("@")) {
-      // Call AI Model API
+    if (text.contains("@Agent")) {
       setState(() {
         showSuggestions = false;
       });
 
+      // Show loading indicator
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -59,8 +60,8 @@ class _ChatScreenState extends State<ChatScreen> {
         },
       );
 
-      String aiResponse = await getAIResponse(text);
-
+      // Get AI response with user-specific data
+      String aiResponse = await getAIResponse(text, tempId); // Pass tempId here
       Navigator.of(context).pop();
 
       // Send AI response to receiver

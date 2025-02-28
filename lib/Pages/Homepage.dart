@@ -15,7 +15,7 @@ class _HomepageState extends State<Homepage> {
   final User? firebaseUser = FirebaseAuth.instance.currentUser;
   final Freelancerdata freelancer = Freelancerdata();
   Map<String, dynamic> freelancerFetchedData = {};
-  String tempId = "67bef670c9c07382fdc7712a";
+  String tempId = "67c17d9973a6c0dcdeda8551";
   late Future<Map<String, dynamic>> _futureData;
   int _currentIndex = 0;
 
@@ -125,9 +125,10 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       Icon(
                         Icons.circle,
-                        color: snapshot.data!["availability"] == "Available"
-                            ? Colors.green
-                            : Colors.red,
+                        color:
+                            snapshot.data!["availability"] == "Available"
+                                ? Colors.green
+                                : Colors.red,
                         size: 14,
                       ),
                       SizedBox(width: 5),
@@ -168,14 +169,15 @@ class _HomepageState extends State<Homepage> {
                   SizedBox(height: 5),
                   Wrap(
                     spacing: 5,
-                    children: snapshot.data!["skills"].map<Widget>((skill) {
-                      return Chip(
-                        label: Text(skill),
-                        avatar: Icon(Icons.computer),
-                        backgroundColor: Colors.green[900],
-                        labelStyle: TextStyle(color: Colors.white),
-                      );
-                    }).toList(),
+                    children:
+                        snapshot.data!["skills"].map<Widget>((skill) {
+                          return Chip(
+                            label: Text(skill),
+                            avatar: Icon(Icons.computer),
+                            backgroundColor: Colors.green[900],
+                            labelStyle: TextStyle(color: Colors.white),
+                          );
+                        }).toList(),
                   ),
 
                   const SizedBox(height: 20),
@@ -190,32 +192,47 @@ class _HomepageState extends State<Homepage> {
                   ),
                   SizedBox(height: 5),
                   Column(
-                    children: snapshot.data!["portfolio"].map<Widget>((project) {
-                      return Card(
-                        color: Colors.grey[850],
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: ListTile(
-                          leading: project["images"].isNotEmpty
-                              ? Image.network(
-                                  // project["images"][0],
-                                  "https://www.ntaskmanager.com/wp-content/uploads/2020/02/What-is-a-Project-1-scaled.jpg",
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                )
-                              : Icon(Icons.image, size: 50, color: Colors.white),
-                          title: Text(project["projectName"], style: TextStyle(color: Colors.white)),
-                          subtitle: Text(project["description"], style: TextStyle(color: Colors.white70)),
-                          trailing: Icon(Icons.arrow_forward, color: Colors.white),
-                          onTap: () {
-                            // openUrl(snapshot.data!["link"]);
-                            launchURL(
-                              "https://dribbble.com/search/ui-for-portfiliio-on-the-mobie", // not working work on it
-                            );
-                          },
-                        ),
-                      );
-                    }).toList(),
+                    children:
+                        snapshot.data!["portfolio"].map<Widget>((project) {
+                          return Card(
+                            color: Colors.grey[850],
+                            margin: EdgeInsets.symmetric(vertical: 8),
+                            child: ListTile(
+                              leading:
+                                  project["images"].isNotEmpty
+                                      ? Image.network(
+                                        project["images"][0],
+                                        // "https://www.ntaskmanager.com/wp-content/uploads/2020/02/What-is-a-Project-1-scaled.jpg",
+                                        width: 50,
+                                        height: 50,
+                                        fit: BoxFit.cover,
+                                      )
+                                      : Icon(
+                                        Icons.image,
+                                        size: 50,
+                                        color: Colors.white,
+                                      ),
+                              title: Text(
+                                project["projectName"],
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              subtitle: Text(
+                                project["description"],
+                                style: TextStyle(color: Colors.white70),
+                              ),
+                              trailing: Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                              ),
+                              onTap: () {
+                                // launchURL(snapshot.data!["link"]);
+                                launchURL(
+                                  "https://www.amazon.in/", // not working work on it
+                                );
+                              },
+                            ),
+                          );
+                        }).toList(),
                   ),
                   const SizedBox(height: 20),
 
@@ -230,26 +247,27 @@ class _HomepageState extends State<Homepage> {
                   ),
                   SizedBox(height: 5),
                   Column(
-                    children: snapshot.data!["education"].map<Widget>((edu) {
-                      return ListTile(
-                        title: Text(
-                          edu["degree"],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "${edu["institution"]} - ${edu["fieldOfStudy"]}",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                    children:
+                        snapshot.data!["education"].map<Widget>((edu) {
+                          return ListTile(
+                            title: Text(
+                              edu["degree"],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                            subtitle: Text(
+                              "${edu["institution"]} - ${edu["fieldOfStudy"]}",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                   ),
                   SizedBox(height: 20),
 
@@ -264,26 +282,27 @@ class _HomepageState extends State<Homepage> {
                   ),
                   SizedBox(height: 5),
                   Column(
-                    children: snapshot.data!["experience"].map<Widget>((exp) {
-                      return ListTile(
-                        title: Text(
-                          exp["position"],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "${exp["company"]} (${exp["startDate"]} - ${exp["endDate"] ?? "Present"})",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                    children:
+                        snapshot.data!["experience"].map<Widget>((exp) {
+                          return ListTile(
+                            title: Text(
+                              exp["position"],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                            subtitle: Text(
+                              "${exp["company"]} (${exp["startDate"]} - ${exp["endDate"] ?? "Present"})",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                   ),
                   SizedBox(height: 20),
                   // 🔹 Ratings

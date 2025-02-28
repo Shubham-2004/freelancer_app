@@ -36,15 +36,24 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      themeMode:
-          ThemeMode
-              .system, 
+      themeMode: ThemeMode.system,
       home: FutureBuilder(
         future: _showAnimation(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Scaffold(
-              body: Center(child: Image.asset('assets/images/animation.gif')),
+              body: Center(
+                child: SizedBox(
+                  height: 300,
+                  width: 300,
+                  child: ClipOval(
+                    child: Image.asset(
+                      'assets/images/animation.gif',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
             );
           } else {
             return StreamBuilder<User?>(
